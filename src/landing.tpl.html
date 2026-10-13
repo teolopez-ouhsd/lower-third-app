@@ -1,0 +1,171 @@
+<title>Lower Thirds Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: ruled sheet like the district brand guide. Navy masthead, paper ground, hairline grid, one big choice of two paths. */
+:root{
+  --bg:#F2F1ED; --panel:#F8F7F4; --fg:#14161B; --muted:#64656B; --line:#D4D3CE;
+  --red:#E20031; --red-text:#B50027; --blue:#0033A1; --navy:#001F61; --tint:#99ADD9; --tonal:#E0E7F4;
+  --display:'Montserrat','Segoe UI',system-ui,sans-serif; --body:'Open Sans','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+.mast{background:var(--navy);color:#fff;border-bottom:4px solid var(--red)}
+.mast .in{max-width:1180px;margin:0 auto;padding:16px 20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.mast img{width:104px;height:auto;display:block}
+.mast .t{display:flex;flex-direction:column;min-width:0}
+.mast .eyebrow{font:600 11px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--tint)}
+.mast .name{font:700 18px var(--display)}
+.sheet{max-width:1180px;margin:0 auto;border-left:1px solid var(--line);border-right:1px solid var(--line);background:var(--bg)}
+.hero{padding:56px 20px 44px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(34px,5.4vw,60px);line-height:1.05;letter-spacing:-.01em;max-width:15ch}
+.hero p{font-size:19px;max-width:54ch;margin:20px 0 0;color:var(--fg)}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.chips a{border:1px solid var(--line);background:var(--panel);padding:8px 16px;text-decoration:none;color:var(--fg);font-weight:600;font-size:14px}
+.chips a:hover{background:var(--tonal);border-color:var(--blue)}
+.paths{display:grid;grid-template-columns:1fr 1fr}
+.path{padding:32px 24px 36px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.path+.path{border-left:1px solid var(--line)}
+.path .for{font:700 12px var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--red-text)}
+.path h2{font-size:clamp(24px,3vw,32px);line-height:1.15}
+.path p{margin:0;max-width:46ch}
+.path ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.path li{display:grid;grid-template-columns:20px 1fr;gap:6px}
+.path li::before{content:"\2713";color:var(--blue);font-weight:700}
+.go{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;background:var(--red);color:#fff;text-decoration:none;font:700 16px var(--display);padding:14px 26px;margin-top:6px}
+.go:hover{filter:brightness(1.08)}
+.go[aria-disabled=true]{background:var(--muted);pointer-events:none}
+.sec{border-top:1px solid var(--line);padding:44px 20px 52px}
+.paths+.sec{border-top:1px solid var(--line)}
+.sec .meta{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.sec .idx{font:700 13px var(--display);color:var(--red-text);letter-spacing:.08em}
+.sec .small{font-size:13px;color:var(--muted)}
+.sec h2{font-size:clamp(24px,3.2vw,34px)}
+.sec .lead{max-width:62ch;margin:10px 0 26px}
+.how{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;align-items:start}
+.vid{border:1px solid var(--navy);background:#000;position:relative}
+.vid video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000}
+.vid .cap{background:var(--navy);color:#fff;font:600 12px var(--display);letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;display:flex;justify-content:space-between;gap:12px}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:0;border:1px solid var(--line);background:var(--panel)}
+.steps li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:10px;padding:14px 16px;border-top:1px solid var(--line);font-size:15px}
+.steps li:first-child{border-top:0}
+.steps li::before{content:counter(s);font:700 14px var(--display);color:#fff;background:var(--blue);width:26px;height:26px;display:grid;place-items:center;border-radius:99px}
+.steps b{font-family:var(--display)}
+.need{margin-top:26px;border:1px solid var(--line);background:var(--panel);padding:16px 18px;font-size:14px}
+.need b{font-family:var(--display)}
+.compare{width:100%;border-collapse:collapse;font-size:15px;background:var(--panel)}
+.compare th,.compare td{border:1px solid var(--line);padding:12px 14px;text-align:left;vertical-align:top}
+.compare thead th{background:var(--blue);color:#fff;font-family:var(--display);font-size:13px;letter-spacing:.04em}
+.compare tbody th{font-family:var(--display);font-size:14px;width:30%}
+.scroll{overflow-x:auto}
+.foot{border-top:1px solid var(--line);padding:22px 20px 40px;font-size:13px;color:var(--muted)}
+.foot b{font-family:var(--display);color:var(--fg)}
+@media (max-width:860px){
+  .paths{grid-template-columns:1fr}.path+.path{border-left:0;border-top:1px solid var(--line)}
+  .how{grid-template-columns:1fr}
+  .hero{padding-top:40px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+
+<header class="mast"><div class="in">
+  <img src="%%LOGO%%" alt="Oxnard Union High School District logo" width="104" height="60">
+  <div class="t"><span class="eyebrow">Brand Style Guide · 2026</span><span class="name">Lower Thirds Tools</span></div>
+</div></header>
+
+<div class="sheet">
+  <section class="hero">
+    <h1>Lower thirds that follow the brand.</h1>
+    <p>Name and title graphics for district video and live streams, built with the official logo, colors and type, and checked against the brand rules as you design. Pick the tool that matches what you are making today.</p>
+    <div class="chips"><a href="#how-video">How the video tool works</a><a href="#how-live">How the live tool works</a><a href="#which">Which one do I need?</a></div>
+  </section>
+
+  <section class="paths" aria-label="Choose a tool">
+    <article class="path">
+      <span class="for">Path 1 · Editing a video</span>
+      <h2>Video Lower Thirds</h2>
+      <p>Design a lower third, then export a transparent file you drop on the timeline in Final Cut Pro, Premiere Pro, DaVinci Resolve or CapCut.</p>
+      <ul>
+        <li>MOV with alpha, WebM with alpha, PNG sequence, PNG still</li>
+        <li>Seven styles, your own graphic, full control of type and size</li>
+        <li>Rundown: paste names from Google Sheets and export every row in one go</li>
+      </ul>
+      <a class="go" href="%%VIDEO_URL%%" target="_blank" rel="noopener" %%VIDEO_ATTR%%>Open the video tool</a>
+    </article>
+    <article class="path">
+      <span class="for">Path 2 · Streaming with OBS</span>
+      <h2>Live Lower Thirds</h2>
+      <p>Style your lower thirds, load a rundown, then put each one on air with a click. A green output window feeds OBS, so floats, sponsors and intermissions come up on cue.</p>
+      <ul>
+        <li>TAKE and CLEAR, with keyboard shortcuts and an auto-hide timer</li>
+        <li>Numbered rundown you can reorder or edit while live</li>
+        <li>Works as a Window Capture with a Chroma Key filter in OBS on a Mac</li>
+      </ul>
+      <a class="go" href="%%LIVE_URL%%" target="_blank" rel="noopener" %%LIVE_ATTR%%>Open the live tool</a>
+    </article>
+  </section>
+
+  <section class="sec" id="how-video">
+    <div class="meta"><span class="idx">VIDEO</span><span class="small">Watch 37 seconds, no sound</span></div>
+    <h2>Make a lower third for an edit</h2>
+    <p class="lead">Six steps from a blank design to a file your editor can use.</p>
+    <div class="how">
+      <div class="vid">
+        <video controls muted playsinline preload="metadata" poster="%%VIDEO_POSTER%%" aria-label="Short silent walkthrough of the video tool"><source src="%%VIDEO_MP4%%" type="video/mp4"><source src="%%VIDEO_WEBM%%" type="video/webm"></video>
+        <div class="cap"><span>Video Lower Thirds</span><span>37 s</span></div>
+      </div>
+      <ol class="steps">
+        <li><span><b>Type the text.</b> Name, title and school. Long text shrinks to fit.</span></li>
+        <li><span><b>Pick a style.</b> Seven layouts, all on brand.</span></li>
+        <li><span><b>Set the look.</b> Plate color, accent, logo, your own graphic.</span></li>
+        <li><span><b>Choose the motion.</b> In and out animation, then press Play.</span></li>
+        <li><span><b>Add a rundown</b> if you have many names. Paste them from Google Sheets.</span></li>
+        <li><span><b>Export.</b> Pick the format that fits your editor.</span></li>
+      </ol>
+    </div>
+    <p class="need"><b>Which format?</b> Final Cut Pro and Premiere Pro take the MOV with alpha. CapCut and web video take the WebM with alpha. If you are unsure, the PNG sequence works in every editor.</p>
+  </section>
+
+  <section class="sec" id="how-live">
+    <div class="meta"><span class="idx">LIVE</span><span class="small">Watch 43 seconds, no sound</span></div>
+    <h2>Run lower thirds on a live stream</h2>
+    <p class="lead">Built for parades, games and events where names, sponsors and intermission cards come up on cue.</p>
+    <div class="how">
+      <div class="vid">
+        <video controls muted playsinline preload="metadata" poster="%%LIVE_POSTER%%" aria-label="Short silent walkthrough of the live tool"><source src="%%LIVE_MP4%%" type="video/mp4"><source src="%%LIVE_WEBM%%" type="video/webm"></video>
+        <div class="cap"><span>Live Lower Thirds</span><span>43 s</span></div>
+      </div>
+      <ol class="steps">
+        <li><span><b>Design your look</b> in the same tool: style, color and type.</span></li>
+        <li><span><b>Add your rundown.</b> Paste from Google Sheets or upload a CSV.</span></li>
+        <li><span><b>Open the output window.</b> A solid green screen with your graphic.</span></li>
+        <li><span><b>In OBS,</b> add it as a Window Capture, then add a Chroma Key filter.</span></li>
+        <li><span><b>Press TAKE</b> on a row to go on air. CLEAR takes it off.</span></li>
+        <li><span><b>Use the keys.</b> Space takes the next row, Esc clears, arrows move the cue.</span></li>
+      </ol>
+    </div>
+    <p class="need"><b>Good to know.</b> Keep the output window uncovered, or in full screen, so it keeps animating. Do not use green in your graphics, since green is what OBS removes.</p>
+  </section>
+
+  <section class="sec" id="which">
+    <div class="meta"><span class="idx">GUIDE</span></div>
+    <h2>Which one do I need?</h2>
+    <p class="lead">If the graphic ends up inside a finished video, use the video tool. If it appears while people are watching, use the live tool.</p>
+    <div class="scroll"><table class="compare">
+      <thead><tr><th scope="col">You are</th><th scope="col">Use</th><th scope="col">You get</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Editing a board meeting, a highlight reel or a promo</th><td>Video Lower Thirds</td><td>A transparent file for your timeline</td></tr>
+        <tr><th scope="row">Streaming a parade, a game or a graduation</th><td>Live Lower Thirds</td><td>A green output window and a TAKE button</td></tr>
+        <tr><th scope="row">Making many names at once</th><td>Either, with the Rundown</td><td>One export per row, or one click per row on air</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="foot"><b>Oxnard Union High School District · Brand Style Guide</b><br>Colors, type and logo follow the <a href="https://teolopez-ouhsd.github.io/communications/brand-guidelines.html" target="_blank" rel="noopener">District Brand Style Guide</a>. Contact Teo Lopez before publishing anything the guide does not cover.</footer>
+</div>

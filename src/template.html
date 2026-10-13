@@ -1,0 +1,559 @@
+<meta charset="utf-8">
+<title>%%TITLE%%</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap">
+<style>
+/* Layout concept: a working bench. Preview stage and checks on the left, one tall control rail on the right, brand navy header. */
+:root{
+  color-scheme:light; --rule:#001F61; --rule-soft:#B9C4DD;
+  --bg:#F2F5FA; --surface:#FFFFFF; --surface-2:#E8EDF6; --fg:#0A1330; --muted:#475577; --line:#CFD7E6;
+  --brand:#0033A1; --brand-fg:#FFFFFF; --navy:#001F61; --tint:#99ADD9;
+  --ok:#0B6B38; --ok-bg:#E1F3E8; --warn:#8A4B00; --warn-bg:#FFF0D6; --bad:#A80029; --bad-bg:#FDE4EA;
+  --focus:#0033A1; --font-display:'Montserrat','Segoe UI',system-ui,sans-serif; --font-body:'Open Sans','Segoe UI',system-ui,sans-serif;
+  --r:8px; --gutter:16px;
+  --red:#E20031; --red-fg:#FFFFFF; --pc:#FCE0E6; --tonal:#E0E7F4; --tonal-fg:#0033A1; --sv:#F4F4F5;
+  --e1:0 1px 2px rgba(0,31,97,.10),0 1px 3px rgba(0,31,97,.08); --e2:0 2px 6px rgba(0,31,97,.16);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--font-display);margin:0;letter-spacing:.01em}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.top{background:var(--navy);color:#fff;padding:12px var(--gutter);display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px}
+.top .logo{display:block;width:112px;height:auto;margin:4px 8px 4px 0}
+.top .ttl{display:flex;flex-direction:column;gap:2px;min-width:0}
+.top h1{font-size:20px;font-weight:700;color:#fff}
+.top .district{font-size:13px;font-weight:600;color:#99ADD9}
+.top .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.top .btn{background:transparent;color:#fff;border:1px solid #99ADD9}
+.top .btn:hover{background:#0A2F7A}
+.top :focus-visible{outline-color:#fff}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;padding:20px var(--gutter) 40px;max-width:1600px;margin:0 auto;align-items:start}
+.stage{display:flex;flex-direction:column;gap:16px;min-width:0}
+.panel{display:flex;flex-direction:column;gap:0;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;min-width:0}
+.card h2{font-size:15px;font-weight:700;margin-bottom:10px}
+.psec{padding:16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:12px;min-width:0}
+.psec:last-child{border-bottom:0}
+.psec h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+label,.lbl{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px}
+.field{min-width:0}
+input[type=text],textarea,select{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;min-height:38px}
+input[type=text]:hover,textarea:hover,select:hover{border-color:var(--muted)}
+textarea{resize:vertical;min-height:96px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.count{font-size:11px;color:var(--muted);float:right;font-weight:400}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:8px 14px;min-height:38px;cursor:pointer;font-weight:600;transition:background .12s}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--brand);color:var(--brand-fg);border-color:var(--brand)}
+.btn.primary:hover{filter:brightness(1.1);background:var(--brand)}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.5;cursor:not-allowed}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);max-width:100%}
+.seg button{border:0;background:transparent;padding:7px 12px;min-height:36px;cursor:pointer;font-weight:600;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:var(--surface-2)}
+.seg button[aria-pressed=true]{background:var(--brand);color:var(--brand-fg)}
+.seg button[disabled]{opacity:.45;cursor:not-allowed}
+.styles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sty{border:2px solid var(--line);border-radius:var(--r);background:var(--surface);padding:0;cursor:pointer;overflow:hidden;text-align:left;display:block;min-width:0}
+.sty canvas{display:block;width:100%;height:auto}
+.sty span{display:block;padding:6px 8px;font-weight:600;font-size:12.5px;font-family:var(--font-display)}
+.sty[aria-checked=true]{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand)}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:6px 10px 6px 6px;cursor:pointer;min-height:38px;font-weight:600}
+.sw i{display:block;width:24px;height:24px;border-radius:3px;border:1px solid rgba(128,128,128,.55)}
+.sw[aria-pressed=true]{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand)}
+.sw[disabled]{opacity:.45;cursor:not-allowed}
+.hint{font-size:12px;color:var(--muted);margin:0}
+.rng{display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:10px;align-items:center}
+.rng output{font-variant-numeric:tabular-nums;text-align:right;font-weight:600;font-size:13px}
+input[type=range]{width:100%;accent-color:var(--brand);min-height:28px}
+.frame{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#222}
+.frame canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.frame.checker{background-color:#d9dde5;background-image:linear-gradient(45deg,#b9c0cf 25%,transparent 25%,transparent 75%,#b9c0cf 75%),linear-gradient(45deg,#b9c0cf 25%,transparent 25%,transparent 75%,#b9c0cf 75%);background-size:32px 32px;background-position:0 0,16px 16px}
+.frame.checker #cvBg{display:none}
+.transport{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.scrubwrap{flex:1 1 220px;min-width:160px}
+.time{font-variant-numeric:tabular-nums;font-weight:600;min-width:120px;text-align:right;font-size:13px}
+.segbar{display:flex;height:22px;margin-top:2px;border-radius:4px;overflow:hidden;font-size:11px;font-weight:600}
+.segbar div{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;min-width:0}
+.segbar .s-in{background:var(--surface-2);color:var(--fg)}
+.segbar .s-hold{background:var(--brand);color:var(--brand-fg)}
+.segbar .s-out{background:var(--surface-2);color:var(--fg)}
+.opts{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.chk{display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--brand)}
+.alerts{display:flex;flex-direction:column;gap:8px}
+.alert{border-radius:var(--r);padding:10px 12px;font-size:13px;border:1px solid transparent}
+.alert.warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn)}
+.alert.bad{background:var(--bad-bg);color:var(--bad);border-color:var(--bad)}
+.alert.info{background:var(--surface-2);color:var(--fg);border-color:var(--line)}
+.alert strong{font-family:var(--font-display)}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.checks li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;padding:8px 0;border-top:1px solid var(--line);align-items:start}
+.checks li:first-child{border-top:0}
+.chip{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-radius:99px;padding:2px 8px;text-align:center;font-family:var(--font-display)}
+.chip.pass{background:var(--ok-bg);color:var(--ok)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.fail{background:var(--bad-bg);color:var(--bad)}
+.chip.info{background:var(--surface-2);color:var(--muted)}
+.checks b{font-weight:600}
+.checks small{display:block;color:var(--muted);font-size:12px}
+.cswatch{display:inline-flex;align-items:center;justify-content:center;width:34px;height:20px;border-radius:3px;border:1px solid rgba(128,128,128,.55);font:700 11px var(--font-display);vertical-align:middle;margin-right:6px}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.fmt{border:2px solid var(--line);border-radius:var(--r);background:var(--surface);padding:10px 12px;text-align:left;cursor:pointer;min-width:0}
+.fmt strong{display:block;font-family:var(--font-display);font-size:13px}
+.fmt span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.fmt[aria-checked=true]{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand)}
+.fmt[aria-disabled=true]{opacity:.55;cursor:not-allowed}
+.exopts{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:flex-end;margin-bottom:12px}
+.progress{height:12px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:10px 0 4px}
+.progress div{height:100%;width:0;background:var(--brand)}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th,.tbl td{text-align:left;padding:6px 8px;border-top:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--font-display);font-size:12px;width:150px}
+.scroll{overflow-x:auto}
+details summary{cursor:pointer;font-weight:600;font-family:var(--font-display);font-size:13px;padding:4px 0}
+details p,details ul{font-size:13px;margin:6px 0}
+code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:3px;word-break:break-all}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.status{font-size:13px;min-height:20px}
+.tabs{display:flex;position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0}
+.tabs button{flex:1;border:0;background:transparent;padding:11px 4px;min-height:44px;cursor:pointer;font-weight:700;font-family:var(--font-display);font-size:13px;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button:hover{background:var(--surface-2)}
+.tabs button[aria-selected=true]{color:var(--brand);border-bottom-color:var(--brand)}
+[hidden]{display:none!important}
+.psec[hidden]{display:none}
+.rhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rdwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);margin-top:12px;max-height:520px;overflow-y:auto}
+table.rd{width:100%;border-collapse:collapse;min-width:760px}
+table.rd th{position:sticky;top:0;background:var(--surface-2);text-align:left;font-family:var(--font-display);font-size:12px;padding:6px 8px;z-index:1}
+table.rd td{padding:4px 6px;border-top:1px solid var(--line);vertical-align:middle}
+table.rd tr.active td{background:var(--surface-2)}
+table.rd tr.dragover td{box-shadow:inset 0 3px 0 var(--brand)}
+table.rd tr.dragging{opacity:.45}
+table.rd input[type=text],table.rd select{min-height:34px;padding:5px 8px}
+.rdnum{display:flex;align-items:center;gap:6px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rdnum .grip{cursor:grab;color:var(--muted);user-select:none;padding:4px 2px;font-size:16px;line-height:1}
+.rdnum button.show{border:1px solid var(--line);background:var(--surface);border-radius:99px;min-width:34px;min-height:34px;font-weight:700;cursor:pointer}
+tr.active .rdnum button.show{background:var(--brand);color:var(--brand-fg);border-color:var(--brand)}
+.rdact{display:flex;gap:4px;white-space:nowrap}
+.ibtn{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);min-width:34px;min-height:34px;cursor:pointer;font-weight:700}
+.ibtn:hover{background:var(--surface-2)}
+.ibtn[disabled]{opacity:.4;cursor:not-allowed}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+#rdPaste{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.gfxprev{display:flex;align-items:center;gap:12px}
+.gfxprev img{max-width:120px;max-height:60px;border:1px solid var(--line);background:#fff;border-radius:4px;padding:4px}
+.bigexport{font-size:15px;min-height:44px;padding:10px 22px}
+@media (min-width:1101px){
+  .panel{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto;overscroll-behavior:contain}
+}
+@media (max-width:1100px){ .app{grid-template-columns:minmax(0,1fr)} .panel{order:2} .styles{grid-template-columns:repeat(3,minmax(0,1fr))} }
+@media (max-width:640px){ .styles{grid-template-columns:repeat(2,minmax(0,1fr))} .top .logo{width:92px} .time{text-align:left} }
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important} }
+
+/* OUHSD UI components guide: filled / tonal / outlined / text buttons, tonal tabs, zebra tables, elevation levels */
+.card,.panel{box-shadow:var(--e1)}
+.btn{background:var(--tonal);color:var(--tonal-fg);border-color:transparent;border-radius:999px;padding:8px 18px}
+.btn:hover{background:var(--tonal);filter:brightness(.96);box-shadow:var(--e2)}
+.btn.primary{background:var(--red);color:var(--red-fg);border-color:var(--red)}
+.btn.primary:hover{background:var(--red);filter:brightness(1.08);box-shadow:var(--e2)}
+.btn.outlined{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn[aria-pressed=true]{background:var(--brand);color:var(--brand-fg)}
+.btn.text{background:transparent;box-shadow:none}
+.top .btn{background:transparent;color:#fff;border:1px solid #99ADD9}
+.top .btn:hover{background:#0A2F7A;filter:none;box-shadow:none}
+.ibtn{border-radius:999px;background:var(--tonal);color:var(--tonal-fg);border-color:transparent}
+.tabs button[aria-selected=true]{color:var(--brand);border-bottom:3px solid var(--red);background:var(--tonal)}
+.seg{border-radius:999px}
+.seg button[aria-pressed=true]{background:var(--tonal);color:var(--tonal-fg);box-shadow:inset 0 0 0 1px var(--brand)}
+.sty[aria-checked=true],.fmt[aria-checked=true],.sw[aria-pressed=true]{background:var(--tonal)}
+.chip{border-radius:8px}
+.chip.info{background:var(--sv)}
+table.rd th,.tbl th{background:var(--brand);color:var(--brand-fg)}
+table.rd tbody tr:nth-child(even) td{background:var(--sv)}
+table.rd tbody tr:hover td{background:var(--tonal)}
+table.rd tr.active td{background:var(--pc)}
+tr.active .rdnum button.show{background:var(--red);border-color:var(--red);color:#fff}
+.alert.info{background:var(--sv)}
+input[type=text],textarea,select{background:var(--sv);border-radius:8px}
+.top .btn{padding:8px 18px}
+
+/* OUHSD brand guide page pattern: dark chrome, quick-link chips, numbered sections, red and blue accent rule, underlined links */
+.top{background:#0F1013;border-bottom:0;position:relative}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,#E20031 0 12%,#fff 12% 12.6%,#0033A1 12.6% 100%)}
+.top .ttl .eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#99ADD9}
+.qlinks{display:flex;gap:8px;flex-wrap:wrap;padding:12px var(--gutter) 0;max-width:1600px;margin:0 auto}
+.qlinks a{display:flex;flex-direction:column;text-decoration:none;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-width:120px;box-shadow:var(--e1)}
+.qlinks a:hover{background:var(--tonal);border-color:var(--brand)}
+.qlinks b{font-family:var(--font-display);font-size:13px}
+.qlinks small{font-size:11px;color:var(--muted)}
+.stage{counter-reset:sec}
+#exportCard>h2,#rundownCard .rhead h2,#checksCard>h2{counter-increment:sec;display:flex;align-items:baseline;gap:10px;font-size:17px}
+#exportCard>h2::before,#rundownCard .rhead h2::before,#checksCard>h2::before{content:"0" counter(sec);font-size:12px;font-weight:700;color:#FF4D6D;letter-spacing:.06em}
+.card{scroll-margin-top:12px}
+a{color:var(--brand);text-decoration:underline}
+.top a{color:#fff}
+.foot{max-width:1600px;margin:0 auto;padding:8px var(--gutter) 32px;color:var(--muted);font-size:12px}
+.foot b{font-family:var(--font-display);color:var(--fg)}
+.foot a{color:var(--brand)}
+
+/* Ruled layout: hairline frames and dividers around every region, square corners */
+:root{--r:2px;--e1:none;--e2:none}
+body{background:#fff}
+.app{border:1px solid var(--rule);border-top:0;margin:0 auto;max-width:1600px;background:var(--bg);gap:0;padding:0;align-items:stretch}
+.stage{padding:20px var(--gutter) 28px;gap:0;border-right:1px solid var(--rule)}
+.stage>.card,.stage>.alerts{margin:0}
+.stage>.card{border:0;border-top:1px solid var(--rule);border-radius:0;padding:18px 0;background:transparent;box-shadow:none}
+.stage>.card:first-child{border-top:0;padding-top:0}
+.stage>.alerts:empty{display:none}
+.stage>.alerts{padding:12px 0}
+.panel{border:0;border-radius:0;background:var(--surface);box-shadow:none}
+.tabs{border-bottom:1px solid var(--rule);border-radius:0}
+.tabs button{border-right:1px solid var(--rule-soft);border-radius:0}
+.tabs button:last-child{border-right:0}
+.psec{border-bottom:1px solid var(--rule)}
+.psec h2{padding-bottom:6px;border-bottom:1px solid var(--rule-soft)}
+.frame{border:1px solid var(--rule);border-radius:0}
+.qlinks{padding:0;max-width:1600px;border:1px solid var(--rule);border-top:0;border-bottom:0;background:var(--surface);gap:0}
+.qlinks a{border:0;border-right:1px solid var(--rule);border-radius:0;box-shadow:none;padding:10px 18px;flex:1 1 0}
+.qlinks a:last-child{border-right:0}
+.qlinks{border-bottom:1px solid var(--rule)}
+.card h2{padding-bottom:8px;border-bottom:1px solid var(--rule-soft)}
+.rdwrap,.seg,.sty,.fmt,.sw,.alert,input[type=text],textarea,select,.tbl{border-color:var(--rule)}
+.rdwrap{border-radius:0}
+table.rd td,table.rd th{border-right:1px solid var(--rule-soft)}
+table.rd td:last-child,table.rd th:last-child{border-right:0}
+table.rd td{border-top:1px solid var(--rule-soft)}
+.checks li{border-top:1px solid var(--rule-soft)}
+.foot{max-width:1600px;border:1px solid var(--rule);border-top:0;padding:14px var(--gutter);background:var(--surface)}
+.top{border-bottom:0}
+.btn,.ibtn,.seg,.qlinks a{border-radius:2px}
+.btn{border-radius:2px}
+.btn.outlined{border-color:var(--rule)}
+.sty,.fmt,.sw,.alert,.card,input[type=text],textarea,select{border-radius:2px}
+@media (max-width:1100px){.stage{border-right:0;border-bottom:1px solid var(--rule)}.qlinks a{flex-basis:45%}.qlinks a:nth-child(2n){border-right:0}}
+
+/* Palette from the brand guide page's light theme: bg #F2F1ED, panel #F8F7F4, text #14161B, lines #D4D3CE. Light only, no dark mode. */
+:root{color-scheme:light;--bg:#F2F1ED;--surface:#F8F7F4;--surface-2:#E9E8E3;--fg:#14161B;--muted:#64656B;--line:#D4D3CE;--rule:#D4D3CE;--rule-soft:#D4D3CE;
+  --brand:#0033A1;--brand-fg:#FFFFFF;--focus:#0033A1;--tonal:#E0E7F4;--tonal-fg:#0033A1;--sv:#ECEBE6;--pc:#FCE0E6;
+  --ok:#0B6B3A;--ok-bg:#E1F1E7;--warn:#7A5300;--warn-bg:#F8ECCB;--bad:#B50027;--bad-bg:#FBE3E8}
+body{background:var(--bg);color:var(--fg)}
+.app{background:var(--bg);border-color:var(--rule)}
+.top{background:#001F61;border-bottom:1px solid var(--rule)}
+.top::after{display:none}
+.top .btn{border-color:#99ADD9;color:#fff}
+.top .btn:hover{background:#0A2F7A}
+.qlinks,.foot{background:var(--surface)}
+.qlinks a{background:var(--surface);color:var(--fg)}
+.qlinks a:hover{background:var(--tonal)}
+.panel,.tabs{background:var(--surface)}
+.btn.primary{color:#fff}
+table.rd th,.tbl th{background:#0033A1;color:#fff}
+input[type=text],textarea,select{background:#fff;color:var(--fg)}
+#exportCard>h2::before,#rundownCard .rhead h2::before,#checksCard>h2::before{color:#B50027}
+.foot b{color:var(--fg)}
+.frame{border-color:var(--rule)}
+
+/* two tools: video export and live OBS output */
+body[data-app=video] .live-only{display:none!important}
+body[data-app=live] .video-only{display:none!important}
+.toolnav{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+.toolnav a{color:#fff;border:1px solid #99ADD9;border-radius:2px;padding:7px 14px;text-decoration:none;font-weight:600;font-size:13px}
+.toolnav a:hover{background:#0A2F7A}
+.toolnav a[href=""],.toolnav a[href="#"]{display:none}
+.top .acts{margin-left:0}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font:700 11px var(--font-display);letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:99px;border:1px solid transparent}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.off{background:var(--sv);color:var(--muted);border-color:var(--rule)}
+.pill.air{background:#E20031;color:#fff}
+.livesteps{margin:0 0 12px;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.inl{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:13px;color:var(--fg)}
+.inl select{width:auto}
+.outhelp{border:1px solid var(--rule);background:var(--sv);padding:12px;margin:12px 0}
+.outhelp p{margin:0 0 8px}.outhelp ol{margin:0 0 10px;padding-left:20px;font-size:13px}
+.outhelp input{flex:1 1 260px}
+.cuebar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0;padding:12px;border:1px solid var(--rule);background:var(--surface)}
+.cuetxt{flex:1 1 200px;min-width:0;font-weight:600;font-family:var(--font-display)}
+.takebtn{min-width:120px}
+.clearbtn{min-width:100px;background:var(--surface);border:2px solid var(--rule);color:var(--fg)}
+table.rd tr.air td{background:var(--bad-bg)}
+table.rd tr.air .rdnum::after{content:"ON AIR";font:700 10px var(--font-display);letter-spacing:.06em;color:#fff;background:#E20031;padding:2px 6px;border-radius:99px}
+.ibtn.tk{min-width:58px;background:#E20031;color:#fff;font-size:11px;letter-spacing:.05em}
+.rdact{display:flex;gap:6px;flex-wrap:nowrap}
+/* output window */
+body.output{background:#00B140;margin:0;overflow:hidden}
+body.output>*:not(#outRoot){display:none!important}
+#outRoot{position:fixed;inset:0;overflow:hidden;cursor:default}
+#outStage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
+#outStage .g{position:absolute;text-rendering:geometricPrecision;-webkit-font-smoothing:antialiased}
+#outStage .g .grp{position:absolute;left:0;top:0;width:100%;height:100%}
+#outStage .g .e{position:absolute}
+#outStage .g img.e{display:block}
+#outStage .g .tm{position:absolute}
+#outStage .g .t{position:absolute;left:0;white-space:nowrap;font-kerning:normal}
+#outHint{position:absolute;left:16px;top:16px;max-width:420px;background:rgba(0,31,97,.92);color:#fff;padding:10px 14px;font:13px/1.45 'Open Sans',system-ui,sans-serif;display:flex;flex-direction:column;gap:2px}
+#outHint b{font-family:Montserrat,system-ui,sans-serif}
+#outHint[hidden]{display:none!important}
+@media (max-width:640px){.takebtn,.clearbtn{flex:1 1 40%}}
+</style>
+
+<header class="top">
+  <img class="logo" id="hdrLogo" alt="Oxnard Union High School District logo" width="112" height="65">
+  <div class="ttl"><span class="eyebrow">%%EYEBROW%%</span><h1>%%TITLE%%</h1><span class="district">Oxnard Union High School District</span></div>
+  <nav class="toolnav" aria-label="Tools"><a href="%%LANDING%%" id="lnkHome" target="_blank" rel="noopener">All tools</a><a href="%%OTHER%%" id="lnkOther" target="_blank" rel="noopener">%%OTHERNAME%%</a></nav>
+  <div class="acts">
+    <button class="btn" id="btnSave" type="button" title="Download your current design as a small file you can reuse later">Save my design</button>
+    <button class="btn" id="btnLoad" type="button" title="Open a design file you saved before">Open saved design</button>
+    <button class="btn" id="btnReset" type="button" title="Go back to the starting design (your rundown stays)">Start over</button>
+    <input type="file" id="fileLoad" accept=".json,application/json" class="sr" tabindex="-1" aria-label="Choose a saved design file">
+  </div>
+</header>
+
+<nav class="qlinks" aria-label="Jump to section"><a href="#previewCard"><b>Preview</b><small>Design and play</small></a><a href="#liveCard" class="live-only"><b>Go live</b><small>Output window, TAKE, CLEAR</small></a><a href="#exportCard" class="video-only"><b>Export</b><small>PNG, MOV, WebM, MP4</small></a><a href="#rundownCard"><b>Rundown</b><small>Rows from Sheets or CSV</small></a><a href="#checksCard"><b>Brand checks</b><small>Rules, auto-tested</small></a></nav>
+<main class="app">
+  <div class="stage">
+    <section class="card" id="previewCard" aria-label="Preview">
+      <div class="frame" id="frame">
+        <canvas id="cvBg" width="1920" height="1080"></canvas>
+        <canvas id="cvOut" width="1920" height="1080" aria-label="Lower third preview"></canvas>
+        <canvas id="cvGuides" width="1920" height="1080"></canvas>
+      </div>
+      <div class="transport" id="transport">
+        <button class="btn primary" id="btnPlay" type="button" style="min-width:88px">Play</button>
+        <button class="btn" id="btnLoop" type="button" aria-pressed="false">Loop</button>
+        <div class="seg" role="group" aria-label="Playback speed" id="speedSeg">
+          <button type="button" data-v="0.5" aria-pressed="false">0.5x</button>
+          <button type="button" data-v="1" aria-pressed="true">1x</button>
+        </div>
+        <div class="scrubwrap">
+          <input type="range" id="scrub" min="0" max="5" step="0.01" value="0.6" aria-label="Timeline position">
+          <div class="segbar" id="segBar" aria-hidden="true"></div>
+        </div>
+        <div class="time" id="timeLbl">0.00 / 5.00 s</div>
+      </div>
+      <div class="opts">
+        <div><span class="lbl" style="display:inline;margin-right:8px">Preview background</span>
+          <div class="seg" role="group" aria-label="Preview background" id="bgSeg">
+            <button type="button" data-v="dusk" aria-pressed="true">Dusk photo</button>
+            <button type="button" data-v="day" aria-pressed="false">Daylight photo</button>
+            <button type="button" data-v="checker" aria-pressed="false">Transparent</button>
+          </div></div>
+        <label class="chk"><input type="checkbox" id="chkSafe"> Title-safe guide</label>
+        <label class="chk"><input type="checkbox" id="chkClear"> Logo clear-space guide</label>
+      </div>
+    </section>
+
+    <section class="alerts" id="alerts" aria-live="polite"></section>
+
+    <section class="card live-only" id="liveCard">
+      <div class="rhead"><h2>Go live</h2><span class="pills"><span class="pill warn" id="outPill">No output window yet</span><span class="pill off" id="airPill">Off air</span></span></div>
+      <ol class="livesteps">
+        <li><b>Open the output window.</b> It shows only a solid color and your lower third.</li>
+        <li><b>In OBS, add a Window Capture</b> of that window, then add a <b>Chroma Key</b> filter to the source.</li>
+        <li><b>Pick a row below and press TAKE.</b> The graphic animates in over your video.</li>
+      </ol>
+      <div class="row">
+        <button class="btn primary" id="btnOpenOut" type="button">Open output window</button>
+        <label class="inl" for="selKey">Background color <select id="selKey"><option value="#00B140">Broadcast green</option><option value="#00FF00">Bright green</option><option value="#0000FF">Blue</option><option value="#FF00FF">Magenta</option><option value="transparent">Transparent (OBS Browser Source from a web address)</option></select></label>
+      </div>
+      <div class="outhelp" id="outHelp" hidden>
+        <p><b>Your viewer blocked the pop-up window.</b> Open the output in its own browser window instead:</p>
+        <ol><li>Press Cmd+N for a new browser window.</li><li>Paste this address and press Return.</li><li>Press F in that window to go full screen, or leave it as a normal window.</li></ol>
+        <div class="row"><input type="text" id="outUrl" readonly aria-label="Output window address"><button class="btn" id="btnCopyOut" type="button">Copy address</button><span class="status" id="copyNote"></span></div>
+        <p class="hint"><a id="outLink" href="#" target="_blank" rel="noopener" hidden>Or open the output from this tool's own link</a></p>
+      </div>
+      <div class="cuebar">
+        <button class="btn" id="bPrev" type="button" aria-label="Cue the previous row">Prev</button>
+        <div class="cuetxt" id="cueTxt" aria-live="polite">Pick a row to cue it</div>
+        <button class="btn" id="bNext" type="button" aria-label="Cue the next row">Next</button>
+        <button class="btn primary bigexport takebtn" id="bTake" type="button">TAKE</button>
+        <button class="btn bigexport clearbtn" id="bClear" type="button">CLEAR</button>
+      </div>
+      <div class="row">
+        <label class="inl" for="selAuto">Hide after <select id="selAuto"><option value="0">I will clear it</option><option value="4">4 seconds</option><option value="6">6 seconds</option><option value="8">8 seconds</option><option value="10">10 seconds</option><option value="15">15 seconds</option></select></label>
+        <label class="chk"><input type="checkbox" id="chkAdv"> Cue the next row after TAKE</label>
+      </div>
+      <p class="hint">Keyboard: Space or Enter takes, Esc clears, arrow keys move the cue.</p>
+      <details><summary>OBS on a Mac, step by step</summary>
+        <ol class="livesteps">
+          <li>In OBS, under Sources press the + button and choose <b>Window Capture</b>. Pick the window named OUHSD Live Output.</li>
+          <li>Right-click the new source, choose <b>Filters</b>, press + under Effect Filters and choose <b>Chroma Key</b>. Set Key Color Type to Green (or the color you picked above).</li>
+          <li>Turn Similarity up to about 400 and Smoothness to about 80 if you see a green edge. Spill Reduction around 100 removes green fringing.</li>
+          <li>Drag the source so it covers the whole canvas. The output window keeps a 16 by 9 shape inside, so it lines up with your video.</li>
+          <li>Keep the output window uncovered. Chrome pauses animation in a window that is minimized or fully hidden behind other windows, so put it on a second display, or press F for full screen on its own desktop space.</li>
+          <li>Do not use the key color in your graphics. The district colors are safe with green or magenta keys.</li>
+        </ol>
+      </details>
+    </section>
+
+    <section class="card video-only" id="exportCard">
+      <h2>Export</h2>
+      <div class="exgrid" id="fmtGrid" role="radiogroup" aria-label="Export format"></div>
+      <div class="exopts" id="exOpts"></div>
+      <div class="row">
+        <button class="btn primary bigexport" id="btnExport" type="button">Export</button>
+        <button class="btn outlined" id="btnCancel" type="button" hidden>Cancel</button>
+        <span class="status" id="estimate" aria-live="polite"></span>
+      </div>
+      <div class="progress" id="progWrap" hidden><div id="progBar"></div></div>
+      <div class="status" id="exStatus" aria-live="polite"></div>
+      <details style="margin-top:12px">
+        <summary>Which format to use in which editor</summary>
+        <div class="scroll"><table class="tbl">
+          <tr><th>OBS Studio (live)</th><td>OBS overlay (zip). A transparent Browser Source drawn with HTML and CSS, plus a control panel with your rundown. See the README inside the zip.</td></tr>
+          <tr><th>DaVinci Resolve</th><td>MOV with alpha, or the PNG sequence. Drag the file in and it plays with transparency.</td></tr>
+          <tr><th>Premiere Pro</th><td>MOV with alpha (Animation codec), or the PNG sequence with "Image Sequence" checked. Fallback: MP4 on green with Ultra Key.</td></tr>
+          <tr><th>Final Cut Pro</th><td>MOV with alpha. For ProRes 4444, convert the PNG sequence with the ffmpeg line in its README. Fallback: MP4 on green with the Keyer effect.</td></tr>
+          <tr><th>CapCut</th><td>MOV with alpha, or MP4 on green with Chroma Key. Alpha support varies by version, so try one export first.</td></tr>
+          <tr><th>Quick review</th><td>Review video (MP4, with the background). Not for editing.</td></tr>
+        </table></div>
+        <p class="hint">Every frame is rendered from the timeline, not recorded from the screen, so exports match the preview. Keying the green MP4: pick #00B140, then lower the edge softness or add a small choke. The Save dialog is controlled by your browser or the Claude app.</p>
+      </details>
+    </section>
+
+    <section class="card" id="rundownCard">
+      <div class="rhead"><h2>Rundown</h2><span class="status" id="rdInfo"></span></div>
+      <p class="hint">One row per lower third or title card, in the order you will run them. Paste a table from Google Sheets or Excel (Name, Title, Third line, optional Style), or upload a CSV. Click a number to show that row in the preview, then edit it here or in the Content tab.</p>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" id="rdAdd" type="button">+ Add row</button>
+        <button class="btn" id="rdPasteBtn" type="button">Paste table</button>
+        <button class="btn" id="rdCsv" type="button">Upload CSV</button>
+        <input type="file" id="rdFile" accept=".csv,.tsv,.txt,text/csv,text/plain" class="sr" tabindex="-1" aria-label="Choose a CSV file">
+        <button class="btn" id="rdTemplate" type="button">CSV template</button>
+        <button class="btn" id="rdExample" type="button">Example rundown</button>
+        <button class="btn outlined" id="rdClear" type="button">Clear all</button>
+      </div>
+      <div id="rdPaste" hidden>
+        <label for="rdPasteIn">Paste cells copied from Google Sheets, Excel or a CSV. A header row is detected automatically.</label>
+        <textarea id="rdPasteIn" spellcheck="false" placeholder="Name&#9;Title&#9;Third line&#9;Style&#10;Float 1&#9;Pacifica High School Marching Band&#9;Oxnard Rotary&#9;Banner Strip"></textarea>
+        <div class="row"><button class="btn primary" id="rdPasteGo" type="button">Add rows</button><button class="btn outlined" id="rdPasteCancel" type="button">Cancel</button><span class="status" id="rdPasteInfo"></span></div>
+      </div>
+      <div class="rdwrap" id="rdWrap"><table class="rd" id="rdTable"></table></div>
+      <div class="row video-only" style="margin-top:12px">
+        <button class="btn primary" id="btnBatch" type="button">Export all rows</button>
+        <span class="status" id="batchInfo"></span>
+      </div>
+      <p class="hint video-only" style="margin-top:6px">Export all uses the format selected in Export above and saves one zip, one folder per row, numbered in this order.</p>
+      <p class="hint live-only" style="margin-top:10px">Click TAKE on a row to put it on air. The row marked ON AIR is what viewers see. Add, reorder or edit rows any time, even while live.</p>
+    </section>
+
+    <section class="card" id="checksCard">
+      <h2>Brand checks</h2>
+      <ul class="checks" id="checks"></ul>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="btnMatrix" type="button">Test every combination</button>
+        <span class="status" id="matrixOut"></span>
+      </div>
+      <p class="hint" style="margin-top:6px">Runs all 8 styles with every plate and accent color, logo on and off, both alignments, a range of widths, heights and type settings, and scrubs every frame of the animation. Questions about brand use that the guide does not cover go to the Communications team.</p>
+    </section>
+  </div>
+
+  <aside class="panel" aria-label="Controls" id="panel">
+    <div class="tabs" role="tablist" aria-label="Control sections" id="tabs">
+      <button type="button" role="tab" id="tab-content" data-tab="content" aria-selected="true" aria-controls="panel">Content</button>
+      <button type="button" role="tab" id="tab-look" data-tab="look" aria-selected="false" aria-controls="panel" tabindex="-1">Look</button>
+      <button type="button" role="tab" id="tab-type" data-tab="type" aria-selected="false" aria-controls="panel" tabindex="-1">Type</button>
+      <button type="button" role="tab" id="tab-motion" data-tab="motion" aria-selected="false" aria-controls="panel" tabindex="-1">Motion</button>
+    </div>
+    <div class="psec" data-tab="content">
+      <h2>Text</h2>
+      <div class="field"><label for="inName">Name <span class="count" id="cName"></span></label><input type="text" id="inName" maxlength="120" autocomplete="off"></div>
+      <div class="field"><label for="inTitle">Title <span class="count" id="cTitle"></span></label><input type="text" id="inTitle" maxlength="120" autocomplete="off"></div>
+      <div class="field"><label for="inThird">Third line (school or department) <span class="count" id="cThird"></span></label><input type="text" id="inThird" maxlength="120" autocomplete="off"></div>
+      <p class="hint">Name is Montserrat. Title and third line are Open Sans. Long text shrinks, then shortens with an ellipsis.</p>
+    </div>
+    <div class="psec" id="typeSec" data-tab="type">
+      <h2>Type</h2>
+      <div class="seg" role="group" aria-label="Line to style" id="lineSeg"><button type="button" data-v="name" aria-pressed="true">Name</button><button type="button" data-v="title" aria-pressed="false">Title</button><button type="button" data-v="third" aria-pressed="false">Third line</button></div>
+      <div class="row">
+        <div><span class="lbl">Case</span><div class="seg" role="group" aria-label="Letter case" id="capsSeg"><button type="button" data-v="as" aria-pressed="true">As typed</button><button type="button" data-v="upper" aria-pressed="false">ALL CAPS</button><button type="button" data-v="lower" aria-pressed="false">lowercase</button></div></div>
+        <div><span class="lbl">Weight</span><div class="seg" role="group" aria-label="Weight" id="weightSeg"></div></div>
+      </div>
+      <div><label for="rngTSize">Size</label><div class="rng"><input type="range" id="rngTSize" min="50" max="200" step="5"><output id="oTSize"></output></div></div>
+      <div><label for="rngTrack">Tracking (space between all letters)</label><div class="rng"><input type="range" id="rngTrack" min="-100" max="400" step="10"><output id="oTrack"></output></div></div>
+      <div><label for="rngLead">Leading (line height)</label><div class="rng"><input type="range" id="rngLead" min="0.9" max="2.5" step="0.05"><output id="oLead"></output></div></div>
+      <div class="row"><label class="chk"><input type="checkbox" id="chkKern"> Kerning (font spacing between letter pairs)</label></div>
+      <div class="row"><button class="btn" id="btnTypeReset" type="button">Reset this line</button></div>
+      <p class="hint">Tracking is in thousandths of an em, like Premiere and Final Cut. Brand type stays Montserrat and Open Sans. Names allow weights 600 and 700, titles allow 400 and 600.</p>
+    </div>
+    <div class="psec" data-tab="content">
+      <h2>Style</h2>
+      <div class="styles" id="styleGrid" role="radiogroup" aria-label="Style"></div>
+    </div>
+    <div class="psec" data-tab="content">
+      <h2>Logo</h2>
+      <div class="row">
+        <div class="seg" role="group" aria-label="Logo" id="logoSeg"><button type="button" data-v="on" aria-pressed="true">On</button><button type="button" data-v="off" aria-pressed="false">Off</button></div>
+      </div>
+      <p class="hint" id="logoHint"></p>
+    </div>
+    <div class="psec" id="gfxSec" data-tab="content">
+      <h2>Your graphic</h2>
+      <div class="row">
+        <button class="btn" id="btnGfx" type="button">Upload image</button>
+        <button class="btn outlined" id="btnGfxRm" type="button" hidden>Remove</button>
+        <input type="file" id="fileGfx" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif" class="sr" tabindex="-1" aria-label="Choose a graphic">
+      </div>
+      <div class="gfxprev" id="gfxPrev" hidden><img id="gfxImg" alt="Your uploaded graphic"><label class="chk"><input type="checkbox" id="chkGfx"> Show</label></div>
+      <div id="gfxSize" hidden><label for="rngGfx">Graphic size</label><div class="rng"><input type="range" id="rngGfx" min="40" max="100" step="5"><output id="oGfx"></output></div></div>
+      <p class="hint">Sits on its own white tile at the end of the graphic and fades in with it. Use a PNG with transparency, an SVG, a JPG or a WebP. The brand rules in this tool cover the OUHSD logo only, so check a sponsor or partner logo against that organization's own rules.</p>
+    </div>
+    <div class="psec" data-tab="look">
+      <h2>Color</h2>
+      <div><span class="lbl">Plate</span><div class="swatches" id="plateSw"></div><p class="hint" id="plateHint" style="margin-top:6px"></p></div>
+      <div><span class="lbl">Accent</span><div class="swatches" id="accentSw"></div></div>
+    </div>
+    <div class="psec" data-tab="look">
+      <h2>Placement</h2>
+      <div><span class="lbl">Alignment</span><div class="seg" role="group" aria-label="Alignment" id="alignSeg"><button type="button" data-v="left" aria-pressed="true">Bottom left</button><button type="button" data-v="right" aria-pressed="false">Bottom right</button></div></div>
+      <div><label for="rngSize">Size</label><div class="rng"><input type="range" id="rngSize" min="0.7" max="1.4" step="0.05"><output id="oSize"></output></div></div>
+      <div><label for="rngMargin">Title-safe margin</label><div class="rng"><input type="range" id="rngMargin" min="5" max="10" step="0.5"><output id="oMargin"></output></div></div>
+    </div>
+    <div class="psec" id="dimSec" data-tab="look">
+      <h2>Width and height</h2>
+      <div>
+        <div class="row" style="justify-content:space-between"><label for="rngW" style="margin:0">Width</label><label class="chk"><input type="checkbox" id="chkAutoW"> Auto</label></div>
+        <div class="rng"><input type="range" id="rngW" min="360" max="1700" step="10"><output id="oW"></output></div>
+      </div>
+      <div>
+        <div class="row" style="justify-content:space-between"><label for="rngH" style="margin:0">Height</label><label class="chk"><input type="checkbox" id="chkAutoH"> Auto</label></div>
+        <div class="rng"><input type="range" id="rngH" min="60" max="400" step="2"><output id="oH"></output></div>
+      </div>
+      <p class="hint" id="dimHint"></p>
+    </div>
+    <div class="psec" data-tab="motion">
+      <h2>Motion</h2>
+      <div class="seg" role="group" aria-label="Motion" id="motionSeg"><button type="button" data-v="static" aria-pressed="false">Static</button><button type="button" data-v="animated" aria-pressed="true">Animated</button></div>
+      <div id="animCtl" style="display:flex;flex-direction:column;gap:12px">
+        <div class="row" style="flex-wrap:nowrap">
+          <div class="field" style="flex:1"><label for="selIn">In</label><select id="selIn"></select></div>
+          <div class="field" style="flex:1"><label for="selOut">Out</label><select id="selOut"></select></div>
+        </div>
+        <div><label for="rngIn">In duration</label><div class="rng"><input type="range" id="rngIn" min="0.2" max="2" step="0.05"><output id="oIn"></output></div></div>
+        <div><label for="rngHold">Hold</label><div class="rng"><input type="range" id="rngHold" min="1" max="15" step="0.5"><output id="oHold"></output></div><button class="btn" id="btnRead" type="button" style="margin-top:6px">Match read time</button></div>
+        <div><label for="rngOut">Out duration</label><div class="rng"><input type="range" id="rngOut" min="0.2" max="2" step="0.05"><output id="oOut"></output></div></div>
+        <p class="hint">In eases out, out eases in. Name, title, plate, accent line and logo move as separate layers.</p>
+      </div>
+    </div>
+  </aside>
+</main>
+<footer class="foot"><b>Oxnard Union High School District · Brand Style Guide</b><br>Colors, type and logo follow the <a href="https://teolopez-ouhsd.github.io/communications/brand-guidelines.html" target="_blank" rel="noopener">District Brand Style Guide</a>. Contact Teo Lopez before publishing anything the guide does not cover.</footer>
+
+<script>
+/*LOGOS*/
+</script>
+<script>
+/*CORE*/
+</script>
+<script>
+/*OVERLAY*/
+</script>
+<script>
+/*UI*/
+</script>
